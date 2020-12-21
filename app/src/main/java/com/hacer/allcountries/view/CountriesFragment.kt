@@ -7,18 +7,27 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.hacer.allcountries.R
 import com.hacer.allcountries.databinding.FragmentCountriesBinding
 import com.hacer.allcountries.viewmodel.CountryViewModel
+import com.hacer.allcountries.viewmodel.HomeViewModel
+import com.hacer.allcountries.viewmodel.ViewModelFactory
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_countries.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.item_country.countryName
 import kotlinx.android.synthetic.main.item_country.countryRegion
+import javax.inject.Inject
 
-class CountriesFragment : Fragment() {
+class CountriesFragment : DaggerFragment() {
 
-    private lateinit var viewModel:CountryViewModel
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(CountryViewModel::class.java)
+    }
     private lateinit var dataBinding : FragmentCountriesBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +47,6 @@ class CountriesFragment : Fragment() {
         arguments?.let {
             countryName = CountriesFragmentArgs.fromBundle(it).countryName
         }
-        viewModel = ViewModelProviders.of(this).get(CountryViewModel::class.java)
         viewModel.getCountryDetails(countryName)
         observeLiveData()
     }

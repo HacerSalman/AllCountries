@@ -6,16 +6,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.hacer.allcountries.adapter.CountryAdapter
 import com.hacer.allcountries.R
 import com.hacer.allcountries.viewmodel.HomeViewModel
+import com.hacer.allcountries.viewmodel.ViewModelFactory
+import dagger.android.support.DaggerFragment
 import kotlinx.android.synthetic.main.fragment_home.*
+import javax.inject.Inject
 
-class HomeFragment : Fragment() {
-    private lateinit var viewModel:HomeViewModel
+class HomeFragment : DaggerFragment() {
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+    private val viewModel by lazy {
+        ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
+    }
     private var adapter = CountryAdapter(arrayListOf())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -32,7 +41,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel = ViewModelProviders.of(this).get(HomeViewModel::class.java)
         viewModel.refreshData()
 
         recyclerViewHome.layoutManager = LinearLayoutManager(context)

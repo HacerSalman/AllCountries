@@ -8,13 +8,15 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.observers.DisposableSingleObserver
 import io.reactivex.schedulers.Schedulers
+import javax.inject.Inject
 
-class HomeViewModel: ViewModel() {
+class HomeViewModel @Inject constructor() : ViewModel() {
     val countryList = MutableLiveData<List<Country>>()
     val errorMessage = MutableLiveData<Boolean>()
     val loading = MutableLiveData<Boolean>()
     private val disposable = CompositeDisposable()
-    private val countryApiService = CountryService()
+    @Inject
+    lateinit var countryApiService: CountryService
 
      fun refreshData() {
         loading.value = true

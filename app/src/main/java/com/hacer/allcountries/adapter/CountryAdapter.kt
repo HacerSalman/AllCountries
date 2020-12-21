@@ -11,8 +11,9 @@ import com.hacer.allcountries.databinding.ItemCountryBinding
 import com.hacer.allcountries.model.Country
 import com.hacer.allcountries.view.HomeFragmentDirections
 import kotlinx.android.synthetic.main.item_country.view.*
+import javax.inject.Inject
 
-class CountryAdapter(private val countryList : ArrayList<Country>) :
+class CountryAdapter (private val countryList : ArrayList<Country>) :
     RecyclerView.Adapter<CountryAdapter.ViewHolder>(),ItemClickListener  {
     class ViewHolder(val view: ItemCountryBinding):RecyclerView.ViewHolder(view.root) {
 
